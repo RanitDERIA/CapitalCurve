@@ -6,7 +6,7 @@ const Positions = () => {
   useEffect(() => {
     const fetchPositions = async () => {
       try {
-        const response = await fetch("http://localhost:3002/allPositions");
+        const response = await fetch("https://elevate-broking.onrender.com/allPositions");
         const data = await response.json();
         setPositions(data);
       } catch (error) {
