@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { BACKEND_URL, DASHBOARD_URL } from "../../config"; // import from your config.js
+import { API_BASE_URL, DASHBOARD_URL } from '../../config'; // use exact names
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -38,7 +38,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        `${BACKEND_URL}/auth/signin`, // use deployed backend
+        `${API_BASE_URL}/auth/login`, // use API_BASE_URL
         {
           email: formData.email,
           password: formData.password,
@@ -49,48 +49,38 @@ function Login() {
         }
       );
 
-      if (
-        res.data.message === "Login successful" ||
-        res.status === 200 ||
-        res.status === 201
-      ) {
+      if (res.data.message === "Login successful") {
         setMessage("🎉 Login successful! Redirecting...");
-        
-        // Save token
         if (res.data.token) {
           if (formData.rememberMe) {
             localStorage.setItem("authToken", res.data.token);
+            localStorage.setItem("rememberMe", "true");
           } else {
             sessionStorage.setItem("authToken", res.data.token);
           }
         }
-
-        // Save user info if provided
         if (res.data.user) {
           const storage = formData.rememberMe ? localStorage : sessionStorage;
           storage.setItem("userData", JSON.stringify(res.data.user));
         }
-
-        // Redirect after short delay
         setTimeout(() => {
           redirectToDashboard();
         }, 1500);
       } else {
-        setMessage(res.data.message || "⚠️ Something went wrong.");
+        setMessage(res.data.message || "⚠️ Something went wrong during login.");
       }
     } catch (err) {
-      console.error("Login error:", err);
       if (err.code === "ECONNABORTED") {
-        setMessage("⚠️ Request timeout. Please check your connection.");
+        setMessage("⚠️ Request timeout. Please check your connection and try again.");
       } else if (err.response) {
         const status = err.response.status;
         if (status === 401) setMessage("⚠️ Invalid email or password.");
         else if (status === 404) setMessage("⚠️ User not found.");
         else setMessage(err.response.data?.message || `⚠️ Error ${status}`);
       } else if (err.request) {
-        setMessage("⚠️ Cannot connect to backend. Check your server URL.");
+        setMessage("⚠️ Cannot connect to server. Please check backend.");
       } else {
-        setMessage("⚠️ Login failed. Try again.");
+        setMessage("⚠️ Login failed. Please try again.");
       }
     } finally {
       setIsLoading(false);
@@ -100,7 +90,7 @@ function Login() {
   return (
     <div className="container mt-5 p-4">
       <div className="text-center mb-5">
-        <h2 style={{ color: "#2E2E38" }}>Log In</h2>
+        <h2 style={{ color: "#2E2E38" }}>Log In to Your Account</h2>
         <p className="text-muted">Welcome back! Please log in to continue.</p>
       </div>
 
@@ -116,7 +106,6 @@ function Login() {
                 {message}
               </div>
             )}
-
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label fw-bold">Email Address</label>
@@ -149,8 +138,8 @@ function Login() {
               <div className="form-check mb-3">
                 <input
                   type="checkbox"
-                  name="rememberMe"
                   className="form-check-input"
+                  name="rememberMe"
                   id="rememberMe"
                   checked={formData.rememberMe}
                   onChange={handleChange}
@@ -173,17 +162,26 @@ function Login() {
                   fontWeight: "600",
                 }}
               >
-                {isLoading ? "Logging In..." : "Log In"}
+                {isLoading ? "Logging in..." : "Log In"}
               </button>
             </form>
 
             <div className="text-center mt-3">
-              <Link to="/signup" className="text-decoration-none text-muted">
-                Don't have an account? Sign up
+              <Link to="/forgot-password" className="text-decoration-none text-muted">
+                Forgot your password?
               </Link>
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="text-center mt-4">
+        <p className="text-muted">
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-decoration-none">
+            Sign up here
+          </Link>
+        </p>
       </div>
     </div>
   );
