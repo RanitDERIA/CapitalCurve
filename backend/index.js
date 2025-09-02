@@ -17,12 +17,12 @@ const URL = process.env.MONGO_URL;
 const app = express();
 
 // --- Middleware
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
-    credentials: true, // required for cookies
-  })
-);
+app.use(cors({
+  origin: ["https://elevate-frontend-mcex.onrender.com", "http://localhost:3000"], 
+  credentials: true
+}));
+
+
 app.use(cookieParser());
 app.use(bodyParser.json());
 
