@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { VerticalGraph } from "./VerticalGraph";
-import config from "./config";   // ⬅️ import config
+import config from ".././config";   // ⬅️ import config
 
 const Holdings = () => {
   const [allHoldings, setAllHoldings] = useState([]);
