@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import API_BASE_URL from "../../config";
+import { API_BASE_URL, DASHBOARD_URL } from "../../config";
 
 function Signup() {
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ function Signup() {
     // Try multiple redirect methods for better compatibility
     try {
       // Method 1: Direct window location assignment
-      window.location.assign("http://localhost:3001/");
+      window.location.assign(DASHBOARD_URL;);
     } catch (error) {
       console.error("Redirect method 1 failed:", error);
       try {
         // Method 2: Using window.open and then closing current
-        window.open("http://localhost:3001/", "_self");
+        window.open(DASHBOARD_URL, "_self");
       } catch (error2) {
         console.error("Redirect method 2 failed:", error2);
         // Method 3: Fallback - manual instruction
