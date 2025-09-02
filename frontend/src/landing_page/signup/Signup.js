@@ -27,7 +27,7 @@ function Signup() {
     // Try multiple redirect methods for better compatibility
     try {
       // Method 1: Direct window location assignment
-      window.location.assign(DASHBOARD_URL;);
+      window.location.assign(DASHBOARD_URL);
     } catch (error) {
       console.error("Redirect method 1 failed:", error);
       try {
