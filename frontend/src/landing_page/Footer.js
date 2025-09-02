@@ -1,9 +1,10 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 function Footer() {
     return (
         <footer style={{ backgroundColor: "#f5f5f5" }}>
-            <div className='container border-top mt-5 pt-5' >
+            <div className='container border-top mt-5 pt-5'>
                 <div className='row'>
                     {/* Brand Info */}
                     <div className='col-4'>
@@ -20,32 +21,32 @@ function Footer() {
                     {/* Company */}
                     <div className='col-2'>
                         <p>Company</p>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/about">About Us</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/pricing">Pricing & Charges</a>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/about">About Us</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/pricing">Pricing & Charges</Link>
                     </div>
 
                     {/* Support */}
                     <div className='col-2'>
                         <p>Support</p>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/support">Help Center</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/support">FAQs</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/contact">Contact Us</a>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/support">Help Center</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/support">FAQs</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/contact">Contact Us</Link>
                     </div>
 
                     {/* Account */}
                     <div className='col-2'>
                         <p>Account</p>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/signup">Open an Account</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/signin">Login</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/funds">Fund Transfer</a>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/signup">Open an Account</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/signin">Login</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/funds">Fund Transfer</Link>
                     </div>
 
                     {/* Quick Links */}
                     <div className='col-2'>
                         <p>Quick Links</p>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/platform">Trading Platform</a>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/platform">Trading Platform</Link>
                         <a className='text-muted d-block' style={{ textDecoration: "none" }} href="https://www.nseindia.com/">Market Insights</a>
-                        <a className='text-muted d-block' style={{ textDecoration: "none" }} href="/terms">Terms & Conditions</a>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/terms">Terms & Conditions</Link>
                     </div>
                 </div>
 
