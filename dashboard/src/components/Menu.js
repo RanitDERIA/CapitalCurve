@@ -29,7 +29,7 @@ const Menu = () => {
               onClick={() => handleMenuClick(0)}
             >
               <p className={selectedMenu === 0 ? activeMenuClass : menuClass}>
-                Dashboard
+                Dash
               </p>
             </Link>
           </li>
