@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL, DASHBOARD_URL } from '../../config'; // Import correctly
 
 function Login() {
-  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,16 +23,12 @@ function Login() {
 
   const handleRedirect = () => {
     try {
-      // Try React Router navigation first
-      if (DASHBOARD_URL.startsWith('/')) {
-        navigate(DASHBOARD_URL);
-      } else {
-        // For external URLs, use window.location with error handling
-        window.location.href = DASHBOARD_URL;
-      }
+      console.log("Redirecting to:", DASHBOARD_URL);
+      // Since DASHBOARD_URL is an external URL, use window.location
+      window.location.href = DASHBOARD_URL;
     } catch (error) {
       console.error("Redirect failed:", error);
-      // Fallback: force page reload to dashboard
+      // Fallback: force page replacement
       window.location.replace(DASHBOARD_URL);
     }
   };
