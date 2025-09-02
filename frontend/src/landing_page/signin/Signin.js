@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { API_BASE_URL, DASHBOARD_URL } from '../../config'; // Import correctly
 
 function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,7 +23,19 @@ function Login() {
   };
 
   const handleRedirect = () => {
-    window.location.href = DASHBOARD_URL; // Redirect to dashboard URL
+    try {
+      // Try React Router navigation first
+      if (DASHBOARD_URL.startsWith('/')) {
+        navigate(DASHBOARD_URL);
+      } else {
+        // For external URLs, use window.location with error handling
+        window.location.href = DASHBOARD_URL;
+      }
+    } catch (error) {
+      console.error("Redirect failed:", error);
+      // Fallback: force page reload to dashboard
+      window.location.replace(DASHBOARD_URL);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -49,30 +62,29 @@ function Login() {
       if (res.data.message === "Login successful") {
         setMessage("🎉 Login successful! Redirecting to Dashboard...");
 
+        // Choose storage type based on rememberMe
+        const storage = formData.rememberMe ? localStorage : sessionStorage;
+
         // Save token
         if (res.data.token) {
+          storage.setItem("authToken", res.data.token);
           if (formData.rememberMe) {
-            localStorage.setItem("authToken", res.data.token);
-            localStorage.setItem("rememberMe", "true");
-          } else {
-            sessionStorage.setItem("authToken", res.data.token);
+            storage.setItem("rememberMe", "true");
           }
         }
 
         // Save user data
         if (res.data.user) {
-          const storage = formData.rememberMe ? localStorage : sessionStorage;
           storage.setItem("userData", JSON.stringify(res.data.user));
         }
 
         // Store login time
-        const storage = formData.rememberMe ? localStorage : sessionStorage;
         storage.setItem("loginTime", new Date().toISOString());
 
-        // Redirect after a short delay to show success message
+        // Ensure storage operations are complete before redirect
         setTimeout(() => {
           handleRedirect();
-        }, 1500);
+        }, 1000); // Reduced timeout for better UX
 
       } else {
         setMessage(res.data.message || "⚠️ Something went wrong during login.");
@@ -80,9 +92,13 @@ function Login() {
 
     } catch (err) {
       console.error("Login error:", err);
-      if (err.code === "ECONNABORTED") setMessage("⚠️ Request timeout.");
-      else if (err.response) setMessage(err.response.data?.message || "⚠️ Login failed.");
-      else setMessage("⚠️ Cannot connect to server. Please check backend.");
+      if (err.code === "ECONNABORTED") {
+        setMessage("⚠️ Request timeout.");
+      } else if (err.response) {
+        setMessage(err.response.data?.message || "⚠️ Login failed.");
+      } else {
+        setMessage("⚠️ Cannot connect to server. Please check backend.");
+      }
     } finally {
       setIsLoading(false);
     }
