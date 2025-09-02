@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { API_BASE_URL, DASHBOARD_URL } from '../../config'; // use exact names
+import { API_BASE_URL, DASHBOARD_URL } from '../../config'; // Import correctly
 
 function Login() {
   const [formData, setFormData] = useState({
@@ -21,8 +21,8 @@ function Login() {
     });
   };
 
-  const redirectToDashboard = () => {
-    window.location.assign(DASHBOARD_URL);
+  const handleRedirect = () => {
+    window.location.href = DASHBOARD_URL; // Redirect to dashboard URL
   };
 
   const handleSubmit = async (e) => {
@@ -38,19 +38,18 @@ function Login() {
 
     try {
       const res = await axios.post(
-        `${API_BASE_URL}/auth/login`, // use API_BASE_URL
+        `${API_BASE_URL}/auth/login`,
         {
           email: formData.email,
           password: formData.password,
         },
-        {
-          timeout: 10000,
-          headers: { "Content-Type": "application/json" },
-        }
+        { headers: { "Content-Type": "application/json" }, timeout: 10000 }
       );
 
       if (res.data.message === "Login successful") {
-        setMessage("🎉 Login successful! Redirecting...");
+        setMessage("🎉 Login successful! Redirecting to Dashboard...");
+
+        // Save token
         if (res.data.token) {
           if (formData.rememberMe) {
             localStorage.setItem("authToken", res.data.token);
@@ -59,29 +58,31 @@ function Login() {
             sessionStorage.setItem("authToken", res.data.token);
           }
         }
+
+        // Save user data
         if (res.data.user) {
           const storage = formData.rememberMe ? localStorage : sessionStorage;
           storage.setItem("userData", JSON.stringify(res.data.user));
         }
+
+        // Store login time
+        const storage = formData.rememberMe ? localStorage : sessionStorage;
+        storage.setItem("loginTime", new Date().toISOString());
+
+        // Redirect after a short delay to show success message
         setTimeout(() => {
-          redirectToDashboard();
+          handleRedirect();
         }, 1500);
+
       } else {
         setMessage(res.data.message || "⚠️ Something went wrong during login.");
       }
+
     } catch (err) {
-      if (err.code === "ECONNABORTED") {
-        setMessage("⚠️ Request timeout. Please check your connection and try again.");
-      } else if (err.response) {
-        const status = err.response.status;
-        if (status === 401) setMessage("⚠️ Invalid email or password.");
-        else if (status === 404) setMessage("⚠️ User not found.");
-        else setMessage(err.response.data?.message || `⚠️ Error ${status}`);
-      } else if (err.request) {
-        setMessage("⚠️ Cannot connect to server. Please check backend.");
-      } else {
-        setMessage("⚠️ Login failed. Please try again.");
-      }
+      console.error("Login error:", err);
+      if (err.code === "ECONNABORTED") setMessage("⚠️ Request timeout.");
+      else if (err.response) setMessage(err.response.data?.message || "⚠️ Login failed.");
+      else setMessage("⚠️ Cannot connect to server. Please check backend.");
     } finally {
       setIsLoading(false);
     }
@@ -106,6 +107,7 @@ function Login() {
                 {message}
               </div>
             )}
+
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label className="form-label fw-bold">Email Address</label>
