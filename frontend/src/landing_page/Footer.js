@@ -10,8 +10,8 @@ function Footer() {
                     <div className='col-4'>
                         <img src='media/images/brand1.png' style={{ width: "50%" }} alt='elevate-broking' />
                         <p>
-                            © 2025, Elevate Broking Ltd.<br />
-                            All rights reserved.<br />
+                             © {new Date().getFullYear()}, Elevate Broking Ltd.<br />
+                              All rights reserved.<br />
                             <a style={{ textDecoration: "none", color: "#2e2e38" }} href='https://www.linkedin.com/in/ranit-deria-916864257/'><i className="fa-brands fa-square-linkedin"></i></a>
                             <a style={{ textDecoration: "none", color: "#2e2e38" }} href='https://github.com/RanitDERIA'><i className="fa-brands fa-square-github"></i></a>
                             <a style={{ textDecoration: "none", color: "#2e2e38" }} href='https://x.com/DeriaRanit'><i className="fa-brands fa-square-x-twitter"></i></a>
@@ -44,7 +44,7 @@ function Footer() {
                     {/* Quick Links */}
                     <div className='col-2'>
                         <p>Quick Links</p>
-                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/platform">Trading Platform</Link>
+                        <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/signup">Trading Platform</Link>
                         <a className='text-muted d-block' style={{ textDecoration: "none" }} href="https://www.nseindia.com/">Market Insights</a>
                         <Link className='text-muted d-block' style={{ textDecoration: "none" }} to="/terms">Terms & Conditions</Link>
                     </div>
