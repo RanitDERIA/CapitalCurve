@@ -1,10 +1,10 @@
+// dashboard/src/components/Dashboard.jsx
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Apps from "./Apps";
 import Funds from "./Funds";
 import Holdings from "./Holdings";
-
 import Orders from "./Orders";
 import Positions from "./Positions";
 import Summary from "./Summary";
@@ -13,21 +13,27 @@ import { GeneralContextProvider } from "./GeneralContext";
 
 const Dashboard = () => {
   return (
-    <div className="dashboard-container">
-      <GeneralContextProvider>
+    <GeneralContextProvider>
+      <div className="dashboard-container">
         <WatchList />
-      </GeneralContextProvider>
-      <div className="content">
-        <Routes>
-          <Route exact path="/" element={<Summary />} />
-          <Route path="/orders" element={<Orders />} />
-          <Route path="/holdings" element={<Holdings />} />
-          <Route path="/positions" element={<Positions />} />
-          <Route path="/funds" element={<Funds />} />
-          <Route path="/apps" element={<Apps />} />
-        </Routes>
+        <div className="content">
+          <Routes>
+            {/* default page: /dashboard */}
+            <Route index element={<Summary />} />
+
+            {/* nested routes: /dashboard/<route> */}
+            <Route path="orders" element={<Orders />} />
+            <Route path="holdings" element={<Holdings />} />
+            <Route path="positions" element={<Positions />} />
+            <Route path="funds" element={<Funds />} />
+            <Route path="apps" element={<Apps />} />
+
+            {/* fallback: redirect unknown paths to index */}
+            <Route path="*" element={<Navigate to="." replace />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </GeneralContextProvider>
   );
 };
 
