@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { BACKEND_URL, DASHBOARD_URL } from "../config"; // import from your config.js
+import { BACKEND_URL, DASHBOARD_URL } from "../../config"; // import from your config.js
 
 function Login() {
   const [formData, setFormData] = useState({
